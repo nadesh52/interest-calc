@@ -2,8 +2,11 @@ import React from "react";
 
 const SubmitButton = () => {
   return (
-    <button type="submit" className="bg-secondary w-fit p-2">
-      submit
+    <button
+      type="submit"
+      className="bg-secondary bg-opacity-80 text-white w-full p-2 rounded-lg hover:bg-opacity-100"
+    >
+      Submit
     </button>
   );
 };
