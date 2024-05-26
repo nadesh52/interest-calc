@@ -1,11 +1,13 @@
 "use client";
 import { getDayDiff } from "@/utils/getDayDiff";
 import { interestCalculator } from "@/utils/interestCalculator";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SubmitButton from "./SubmitButton";
+import MonthSelect from "./MonthSelect";
+import DatePicker from "./DatePicker";
+import Input from "./Input";
 
 //ฝากประจำ
-const months = [3, 6, 12, 24, 36];
 
 const getDay = (date: any, _month: any) => {
   const month = Number(_month);
@@ -33,65 +35,53 @@ const FixedPlan = () => {
     const res = interestCalculator(amount, rate, days);
     setResult(res);
   };
-  useEffect(() => {}, []);
 
   return (
-    <section>
+    <section className="mx-auto">
       FixedPlan
       <form onSubmit={handleSubmit}>
         <div>
-          amount
-          <input
-            name="amount"
+          <label>
+            <span>amount</span>
+          </label>
+          <Input
             type="number"
             min={0}
             step={0.01}
-            autoComplete="off"
+            required
             onChange={(e: any) => setAmount(e.target.value)}
-            className="border border-primary m-3"
           />
         </div>
 
         <div>
-          rate
-          <input
-            name="rate"
+          <label>
+            <span>rate</span>
+          </label>
+          <Input
             type="number"
             min={0}
             step={0.01}
-            autoComplete="off"
+            required
             onChange={(e: any) => setRate(e.target.value)}
-            className="border border-primary m-3"
           />
         </div>
 
         <div>
-          month
-          <select
-            name="select-month"
-            className="border border-primary rounded-md px-2 py-1"
-            onChange={(e: any) => setSelectedMonth(e.target.value)}
-            value={selectedMonth}
-          >
-            <option value="0" disabled>
-              เลือกจำนวนเดือน
-            </option>
-            {months.map((m: any, idx: number) => (
-              <option key={idx} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <label>
+            <span>month</span>
+          </label>
+
+          <MonthSelect
+            selectedValue={(e: any) => setSelectedMonth(e.target.value)}
+          />
         </div>
 
         <div>
-          start time
-          <input
-            name="start-time"
-            type="date"
-            autoComplete="off"
-            onChange={(e: any) => setSelectedDate(e.target.value)}
-            className="border border-primary m-3"
+          <label>
+            <span>start time</span>
+          </label>
+          <DatePicker
+            selectedValue={(e: any) => setSelectedDate(e.target.value)}
           />
         </div>
 
