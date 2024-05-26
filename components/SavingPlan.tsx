@@ -4,15 +4,13 @@ import { interestCalculator } from "@/utils/interestCalculator";
 import React, { useState } from "react";
 import SubmitButton from "./SubmitButton";
 import DatePicker from "./DatePicker";
-import ResetButton from "./ResetButton";
 import Input from "./Input";
 
-const SavingPlan = () => {
+const SavingPlan = ({ total }: any) => {
   const [amount, setAmount] = useState(0);
   const [rate, setRate] = useState(0);
   const [startDate, setStartDate] = useState(0);
   const [endDate, setEndDate] = useState(0);
-  const [results, setResults] = useState(0);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -20,18 +18,27 @@ const SavingPlan = () => {
     const dayDiff = getDayDiff(startDate, endDate);
     const res = interestCalculator(amount, rate, dayDiff);
 
-    setResults(res);
+    const sum = Number(amount) + res;
+
+    const result = {
+      amount: Number(amount),
+      interest: res,
+      total: sum,
+      day: dayDiff,
+    };
+
+    total(result);
   };
 
   return (
-    <section className="select-none">
-      saving
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            <span>amount</span>
-          </label>
+    <section className="bg-white rounded-lg shadow-lg py-3 px-3 w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-2 gap-x-5 gap-y-2"
+      >
+        <div className="col-span-2">
           <Input
+            label="Amount"
             type="number"
             min={0}
             step={0.01}
@@ -40,11 +47,9 @@ const SavingPlan = () => {
           />
         </div>
 
-        <div>
-          <label>
-            <span>rate</span>
-          </label>
+        <div className="col-span-2">
           <Input
+            label="Interest Rate (%)"
             type="number"
             min={0}
             step={0.01}
@@ -53,35 +58,26 @@ const SavingPlan = () => {
           />
         </div>
 
-        <div>
-          <label>
-            <span>start time</span>
-          </label>
+        <div className="col-span-1">
           <DatePicker
+            label="Start Date"
             selectedValue={(e: any) =>
               setStartDate(new Date(e.target.value).getTime())
             }
           />
         </div>
 
-        <div>
-          <label>
-            <span>end time</span>
-          </label>
+        <div className="col-span-1">
           <DatePicker
+            label="End Date"
             selectedValue={(e: any) =>
               setEndDate(new Date(e.target.value).getTime())
             }
           />
         </div>
 
-        <div>
+        <div className="col-span-2 mt-4">
           <SubmitButton />
-          <ResetButton />
-        </div>
-
-        <div>
-          <input type="number" disabled value={results} />
         </div>
       </form>
     </section>

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const months = [3, 6, 12, 24, 36];
 
-const MonthSelect = ({ selectedValue }: any) => {
+const MonthSelect = ({ selectedValue, label }: any) => {
   const [isHidden, setIsHidden] = useState(true);
   const [value, setValue] = useState(0);
 
@@ -27,26 +27,37 @@ const MonthSelect = ({ selectedValue }: any) => {
   }, []);
 
   return (
-    <div className="inline-block">
+    <label className="relative">
       <button
         ref={listRef}
         onClick={(e) => {
           e.preventDefault();
           setIsHidden(!isHidden);
         }}
-        className="relative border border-primary rounded-lg focus:outline-none bg-white flex items-center justify-between w-40 h-10 px-1"
+        className="relative border border-grey rounded-md focus:outline-none bg-white flex items-center justify-between w-full h-10 mt-3 peer"
       >
-        <span className="pointer-events-none ml-3 text-primary">
-          {value !== 0 ? `${value} month` : "Select Month"}
-        </span>
-        <span className="pointer-events-none">
-          <ChevronUpDownIcon className="size-7 stroke-secondary stroke-1" />
-        </span>
+        {value !== 0 ? (
+          <>
+            <span className="pointer-events-none ml-3 text-secondary">
+              {value} month
+            </span>
+
+            <span className="absolute left-2 -top-2.5 bg-white text-black text-opacity-30 px-1 text-sm">
+              {label}
+            </span>
+          </>
+        ) : (
+          <span className="pointer-events-none ml-3 text-lg text-black text-opacity-50">
+            Select Month
+          </span>
+        )}
+
+        <ChevronUpDownIcon className="size-7 stroke-secondary stroke-1 pointer-events-none" />
 
         {!isHidden && (
           <div
             ref={menuRef}
-            className="absolute left-0 top-full min-w-full w-max mt-0.5"
+            className="absolute left-0 top-full min-w-full w-max mt-0.5 z-50"
           >
             <ul className="bg-white p-2 rounded-lg shadow-md border border-grey text-left">
               {months.map((m: any, idx: number) => (
@@ -63,7 +74,7 @@ const MonthSelect = ({ selectedValue }: any) => {
           </div>
         )}
       </button>
-    </div>
+    </label>
   );
 };
 

@@ -21,30 +21,39 @@ const getDay = (date: any, _month: any) => {
   return dayDiff;
 };
 
-const FixedPlan = () => {
+const FixedPlan = ({ total }: any) => {
   const [amount, setAmount] = useState(0);
   const [rate, setRate] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
-  const [result, setResult] = useState(0);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const days = getDay(new Date(selectedDate), selectedMonth);
 
     const res = interestCalculator(amount, rate, days);
-    setResult(res);
+
+    const sum = Number(amount) + res;
+
+    const result = {
+      amount: Number(amount),
+      interest: res,
+      total: sum,
+      day: days,
+    };
+
+    total(result);
   };
 
   return (
-    <section className="mx-auto">
-      FixedPlan
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            <span>amount</span>
-          </label>
+    <section className="bg-white rounded-lg shadow-lg py-3 px-3 w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-2 gap-x-5 gap-y-2"
+      >
+        <div className="col-span-2">
           <Input
+            label="Amount"
             type="number"
             min={0}
             step={0.01}
@@ -54,10 +63,8 @@ const FixedPlan = () => {
         </div>
 
         <div>
-          <label>
-            <span>rate</span>
-          </label>
           <Input
+            label="Interest Rate (%)"
             type="number"
             min={0}
             step={0.01}
@@ -67,29 +74,23 @@ const FixedPlan = () => {
         </div>
 
         <div>
-          <label>
-            <span>month</span>
-          </label>
-
-          <MonthSelect
-            selectedValue={(e: any) => setSelectedMonth(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>
-            <span>start time</span>
-          </label>
           <DatePicker
+            label="Start Date"
             selectedValue={(e: any) => setSelectedDate(e.target.value)}
           />
         </div>
 
-        <div>
+        <div className="col-span-2">
+          <MonthSelect
+            label="Select Month"
+            selectedValue={(e: any) => setSelectedMonth(e.target.value)}
+          />
+        </div>
+
+        <div className="col-span-2 mt-4">
           <SubmitButton />
         </div>
       </form>
-      <div>{result}</div>
     </section>
   );
 };
